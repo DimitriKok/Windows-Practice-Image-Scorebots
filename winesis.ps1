@@ -222,7 +222,7 @@ Write-Output " "
 
 # spot to put your vulns begins here
 
-# CheckTextExists -file 'C:\Users\Cyber\Desktop\FQ1' -text "SpavisComputer" -vuln_name "Forensics 1" -points 5
+CheckTextExists -file 'C:\Users\Cyber\Desktop\FQ1' -text "SpavisComputer" -vuln_name "Forensics 1" -points 5
 CheckFileDeleted -file 'C:\Users\Cyber\AppData\Local\Discord\app.ico' -vuln_name "Removed Unwanted Software" -points 5
 # CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -key ConsentPromptBehaviorAdmin -expected_value "2" -vuln_name "User Account Control Configured" -points 5
 # CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile" -key EnableFirewall -expected_value "1" -vuln_name "Firewall Configured" -points 5
