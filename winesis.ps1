@@ -225,79 +225,99 @@ Write-Output " "
 CheckTextExists -file 'C:\Users\Cyber\Desktop\FQ1.txt' -text "SpavisComputer" -vuln_name "Forensics 1" -points 5
 CheckFileDeleted -file 'C:\Users\Cyber\AppData\Local\Discord\app.ico' -vuln_name "Removed Unwanted Software" -points 5
 CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -key ConsentPromptBehaviorAdmin -expected_value "2" -vuln_name "User Account Control Configured" -points 5
-# CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile" -key EnableFirewall -expected_value "1" -vuln_name "Firewall Configured" -points 5
-# CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance" -key fAllowToGetHelp -expected_value "0" -vuln_name "Disabled Remote Assistance" -points 5
-# CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" -key fDenyTSConnections -expected_value "1" -vuln_name "Disabled Remote Desktop" -points 5
-# CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -key RPSessionInterval -expected_value "1" -vuln_name "Turned on System Protection" -points 5
-# CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\New Windows" -key PopupMgr -expected_value "1" -vuln_name "Enabled Pop-Up Blocker" -points 5
-# CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key EnableHttp1_1 -expected_value "0" -vuln_name "Disabled HTTP 1.1" -points 5
-# CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key EnableHttp2 -expected_value "1" -vuln_name "Disabled HTTP 1.1" -points 5
-# CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key ProxyHttp1.1 -expected_value "0" -vuln_name "Disabled HTTP 1.1 through proxy connections" -points 5
-# CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -key DisableAutoplay -expected_value "1" -vuln_name "Disabled AutoPlay" -points 5
-# CheckFileDeleted -Path 'C:\Windows\System32\TFTP.EXE' -vuln_name "Uninstalled TFTP" -points 5
+CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile" -key EnableFirewall -expected_value "1" -vuln_name "Firewall Configured" -points 5
+CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance" -key fAllowToGetHelp -expected_value "0" -vuln_name "Disabled Remote Assistance" -points 5
+CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" -key fDenyTSConnections -expected_value "1" -vuln_name "Disabled Remote Desktop" -points 5
+CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -key RPSessionInterval -expected_value "1" -vuln_name "Turned on System Protection" -points 5
+CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\New Windows" -key PopupMgr -expected_value "1" -vuln_name "Enabled Pop-Up Blocker" -points 5
+CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key EnableHttp1_1 -expected_value "0" -vuln_name "Disabled HTTP 1.1" -points 5
+CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key EnableHttp2 -expected_value "1" -vuln_name "Disabled HTTP 1.1" -points 5
+CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key ProxyHttp1.1 -expected_value "0" -vuln_name "Disabled HTTP 1.1 through proxy connections" -points 5
+CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -key DisableAutoplay -expected_value "1" -vuln_name "Disabled AutoPlay" -points 5
+
+# Define the feature name for TFTP
+$featureName = 'TFTP'
+
+# Check if TFTP feature is installed
+$feature = Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $featureName }
+
+# Check the status and output result
+if ($feature) {
+    if ($feature.State -eq 'Enabled') {
+        Write-Output "Unsolved Vuln"
+    } else {
+        Solved -vuln_name "Uninstalled TFTP" -points 5
+    }
+} else {
+
+}
 
 
-# $adapterName = "Ethernet0"
-# $ipv6Binding = Get-NetAdapterBinding -ComponentID ms_tcpip6 | Where-Object { $_.Name -eq $adapterName }
 
-# if ($ipv6Binding -and $ipv6Binding.Disabled -eq $true) {
-#     Solved -vuln_name "Disable IPv6" -points 5
-# }
+$adapterName = "Ethernet0"
+$ipv6Binding = Get-NetAdapterBinding -ComponentID ms_tcpip6 | Where-Object { $_.Name -eq $adapterName }
 
-# # Define the name of the adapter you want to check (Ethernet0)
-# $adapterName = "Ethernet0"
+if ($ipv6Binding -and $ipv6Binding.Disabled -eq $true) {
+    Solved -vuln_name "Disable IPv6" -points 5
+}else{
+    Write-Output "Unsolved Vuln"
+}
 
-# # Check if the adapter exists
-# $adapter = Get-NetAdapter -Name $adapterName -ErrorAction SilentlyContinue
+# Define the name of the adapter you want to check (Ethernet0)
+$adapterName = "Ethernet0"
 
-# if ($adapter) {
-#     # Check if LLTDIO (Link-Layer Topology Discovery Mapper I/O Driver) is enabled
-#     $bindingStatus = Get-NetAdapterBinding -Name $adapterName -ComponentID ms_lltdio
+# Check if the adapter exists
+$adapter = Get-NetAdapter -Name $adapterName -ErrorAction SilentlyContinue
 
-#     if ($bindingStatus.Enabled) {
+if ($adapter) {
+    # Check if LLTDIO (Link-Layer Topology Discovery Mapper I/O Driver) is enabled
+    $bindingStatus = Get-NetAdapterBinding -Name $adapterName -ComponentID ms_lltdio
+
+    if ($bindingStatus.Enabled) {
         
-#     } else {
-#         Solved -vuln_name "Disabled Link-Layer Topology Discovery Mapper I/O Driver" -points 5
-#     }
-# } else {
+    } else {
+        Solved -vuln_name "Disabled Link-Layer Topology Discovery Mapper I/O Driver" -points 5
+    }
+} else {
+    Write-Output "Unsolved Vuln"
+}
 
-# }
+# Define the registry path for Internet Explorer security zones
+$regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones"
 
-# # Define the registry path for Internet Explorer security zones
-# $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones"
+# Function to get the security level for a given zone
+function Get-SecurityZoneLevel {
+    param (
+        [int]$zoneId
+    )
 
-# # Function to get the security level for a given zone
-# function Get-SecurityZoneLevel {
-#     param (
-#         [int]$zoneId
-#     )
+    # Define the registry key path for the specified zone
+    $regKey = "$regPath\$zoneId"
 
-#     # Define the registry key path for the specified zone
-#     $regKey = "$regPath\$zoneId"
+    if (Test-Path $regKey) {
+        # Read the security level value from the registry
+        $zoneSettings = Get-ItemProperty -Path $regKey
+        if ($zoneSettings.PSObject.Properties.Match("1001")) {
+            # 1001 is the key for the Security Level
+            return $zoneSettings."1001"
+        } else {
+            return "Security level not found for zone ID $zoneId."
+        }
+    } else {
+        return "Zone $zoneId not found."
+    }
+}
 
-#     if (Test-Path $regKey) {
-#         # Read the security level value from the registry
-#         $zoneSettings = Get-ItemProperty -Path $regKey
-#         if ($zoneSettings.PSObject.Properties.Match("1001")) {
-#             # 1001 is the key for the Security Level
-#             return $zoneSettings."1001"
-#         } else {
-#             return "Security level not found for zone ID $zoneId."
-#         }
-#     } else {
-#         return "Zone $zoneId not found."
-#     }
-# }
+# Check the Internet zone (zone ID 3)
+$internetZoneId = 3
+$securityLevel = Get-SecurityZoneLevel -zoneId $internetZoneId
 
-# # Check the Internet zone (zone ID 3)
-# $internetZoneId = 3
-# $securityLevel = Get-SecurityZoneLevel -zoneId $internetZoneId
-
-# # Output the security level and print "yay" if the level is 3
-# if ($securityLevel -eq 3) {
-#     Solved -vuln_name "Security Zone Set to 3" -points 5
-# } else {
-# }
+# Output the security level and print "yay" if the level is 3
+if ($securityLevel -eq 3) {
+    Solved -vuln_name "Security Zone Set to 3" -points 5
+} else {
+    Write-Output "Unsolved Vuln"
+}
 
 
 
@@ -306,4 +326,4 @@ CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVer
 # spot to put your vulns ends here
 
 
-Write-Output "Total Score: $score/100"
+Write-Output "Total Score: $score/75"
