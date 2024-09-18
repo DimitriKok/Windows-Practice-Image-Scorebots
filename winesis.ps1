@@ -237,67 +237,67 @@ CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVers
 CheckFileDeleted -Path 'C:\Windows\System32\TFTP.EXE' -vuln_name "Uninstalled TFTP" -points 5
 
 
-$adapterName = "Ethernet0"
-$ipv6Binding = Get-NetAdapterBinding -ComponentID ms_tcpip6 | Where-Object { $_.Name -eq $adapterName }
+# $adapterName = "Ethernet0"
+# $ipv6Binding = Get-NetAdapterBinding -ComponentID ms_tcpip6 | Where-Object { $_.Name -eq $adapterName }
 
-if ($ipv6Binding -and $ipv6Binding.Disabled -eq $true) {
-    Solved -vuln_name "Disable IPv6" -points 5
-}
+# if ($ipv6Binding -and $ipv6Binding.Disabled -eq $true) {
+#     Solved -vuln_name "Disable IPv6" -points 5
+# }
 
-# Define the name of the adapter you want to check (Ethernet0)
-$adapterName = "Ethernet0"
+# # Define the name of the adapter you want to check (Ethernet0)
+# $adapterName = "Ethernet0"
 
-# Check if the adapter exists
-$adapter = Get-NetAdapter -Name $adapterName -ErrorAction SilentlyContinue
+# # Check if the adapter exists
+# $adapter = Get-NetAdapter -Name $adapterName -ErrorAction SilentlyContinue
 
-if ($adapter) {
-    # Check if LLTDIO (Link-Layer Topology Discovery Mapper I/O Driver) is enabled
-    $bindingStatus = Get-NetAdapterBinding -Name $adapterName -ComponentID ms_lltdio
+# if ($adapter) {
+#     # Check if LLTDIO (Link-Layer Topology Discovery Mapper I/O Driver) is enabled
+#     $bindingStatus = Get-NetAdapterBinding -Name $adapterName -ComponentID ms_lltdio
 
-    if ($bindingStatus.Enabled) {
+#     if ($bindingStatus.Enabled) {
         
-    } else {
-        Solved -vuln_name "Disabled Link-Layer Topology Discovery Mapper I/O Driver" -points 5
-    }
-} else {
+#     } else {
+#         Solved -vuln_name "Disabled Link-Layer Topology Discovery Mapper I/O Driver" -points 5
+#     }
+# } else {
 
-}
+# }
 
-# Define the registry path for Internet Explorer security zones
-$regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones"
+# # Define the registry path for Internet Explorer security zones
+# $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones"
 
-# Function to get the security level for a given zone
-function Get-SecurityZoneLevel {
-    param (
-        [int]$zoneId
-    )
+# # Function to get the security level for a given zone
+# function Get-SecurityZoneLevel {
+#     param (
+#         [int]$zoneId
+#     )
 
-    # Define the registry key path for the specified zone
-    $regKey = "$regPath\$zoneId"
+#     # Define the registry key path for the specified zone
+#     $regKey = "$regPath\$zoneId"
 
-    if (Test-Path $regKey) {
-        # Read the security level value from the registry
-        $zoneSettings = Get-ItemProperty -Path $regKey
-        if ($zoneSettings.PSObject.Properties.Match("1001")) {
-            # 1001 is the key for the Security Level
-            return $zoneSettings."1001"
-        } else {
-            return "Security level not found for zone ID $zoneId."
-        }
-    } else {
-        return "Zone $zoneId not found."
-    }
-}
+#     if (Test-Path $regKey) {
+#         # Read the security level value from the registry
+#         $zoneSettings = Get-ItemProperty -Path $regKey
+#         if ($zoneSettings.PSObject.Properties.Match("1001")) {
+#             # 1001 is the key for the Security Level
+#             return $zoneSettings."1001"
+#         } else {
+#             return "Security level not found for zone ID $zoneId."
+#         }
+#     } else {
+#         return "Zone $zoneId not found."
+#     }
+# }
 
-# Check the Internet zone (zone ID 3)
-$internetZoneId = 3
-$securityLevel = Get-SecurityZoneLevel -zoneId $internetZoneId
+# # Check the Internet zone (zone ID 3)
+# $internetZoneId = 3
+# $securityLevel = Get-SecurityZoneLevel -zoneId $internetZoneId
 
-# Output the security level and print "yay" if the level is 3
-if ($securityLevel -eq 3) {
-    Solved -vuln_name "Security Zone Set to 3" -points 5
-} else {
-}
+# # Output the security level and print "yay" if the level is 3
+# if ($securityLevel -eq 3) {
+#     Solved -vuln_name "Security Zone Set to 3" -points 5
+# } else {
+# }
 
 
 
