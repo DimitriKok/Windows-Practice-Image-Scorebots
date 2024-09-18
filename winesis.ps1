@@ -224,16 +224,16 @@ Write-Output " "
 
 CheckTextExists -file 'C:\Users\Cyber\Desktop\FQ1.txt' -text "SpavisComputer" -vuln_name "Forensics 1" -points 5
 CheckFileDeleted -file 'C:\Users\Cyber\AppData\Local\Discord\app.ico' -vuln_name "Removed Unwanted Software" -points 5
-CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -key ConsentPromptBehaviorAdmin -expected_value "2" -vuln_name "User Account Control Configured" -points 5
-CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile" -key EnableFirewall -expected_value "1" -vuln_name "Firewall Configured" -points 5
-CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance" -key fAllowToGetHelp -expected_value "0" -vuln_name "Disabled Remote Assistance" -points 5
-CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" -key fDenyTSConnections -expected_value "1" -vuln_name "Disabled Remote Desktop" -points 5
-CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -key RPSessionInterval -expected_value "1" -vuln_name "Turned on System Protection" -points 5
-CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\New Windows" -key PopupMgr -expected_value "1" -vuln_name "Enabled Pop-Up Blocker" -points 5
-CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key EnableHttp1_1 -expected_value "0" -vuln_name "Disabled HTTP 1.1" -points 5
-CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key EnableHttp2 -expected_value "1" -vuln_name "Disabled HTTP 1.1" -points 5
-CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key ProxyHttp1.1 -expected_value "0" -vuln_name "Disabled HTTP 1.1 through proxy connections" -points 5
-CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -key DisableAutoplay -expected_value "1" -vuln_name "Disabled AutoPlay" -points 5
+CheckRegistryKey -path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -key ConsentPromptBehaviorAdmin -expected_value "2" -vuln_name "User Account Control Configured" -points 5
+CheckRegistryKey -path "HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile" -key EnableFirewall -expected_value "1" -vuln_name "Firewall Configured" -points 5
+CheckRegistryKey -path "HKLM:\SYSTEM\CurrentControlSet\Control\Remote Assistance" -key fAllowToGetHelp -expected_value "0" -vuln_name "Disabled Remote Assistance" -points 5
+CheckRegistryKey -path "HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server" -key fDenyTSConnections -expected_value "1" -vuln_name "Disabled Remote Desktop" -points 5
+CheckRegistryKey -path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -key RPSessionInterval -expected_value "1" -vuln_name "Turned on System Protection" -points 5
+CheckRegistryKey -path "HKCU:\Software\Microsoft\Internet Explorer\New Windows" -key PopupMgr -expected_value "1" -vuln_name "Enabled Pop-Up Blocker" -points 5
+CheckRegistryKey -path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key EnableHttp1_1 -expected_value "0" -vuln_name "Disabled HTTP 1.1" -points 5
+CheckRegistryKey -path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key EnableHttp2 -expected_value "1" -vuln_name "Enabled HTTP 2" -points 5
+CheckRegistryKey -path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key ProxyHttp1.1 -expected_value "0" -vuln_name "Disabled HTTP 1.1 through proxy connections" -points 5
+CheckRegistryKey -path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -key DisableAutoplay -expected_value "1" -vuln_name "Disabled AutoPlay" -points 5
 
 # Define the feature name for TFTP
 $featureName = 'TFTP'
@@ -254,13 +254,27 @@ if ($feature) {
 
 
 
+# Specify the adapter name
 $adapterName = "Ethernet0"
-$ipv6Binding = Get-NetAdapterBinding -ComponentID ms_tcpip6 | Where-Object { $_.Name -eq $adapterName }
 
-if ($ipv6Binding -and $ipv6Binding.Disabled -eq $true) {
-    Solved -vuln_name "Disable IPv6" -points 5
-}else{
-    Write-Output "Unsolved Vuln"
+# Get the network adapter
+$adapter = Get-NetAdapter -Name $adapterName -ErrorAction SilentlyContinue
+
+# Check if the adapter exists
+if ($adapter) {
+    # Get the IP addresses assigned to the adapter
+    $addresses = Get-NetIPAddress -InterfaceAlias $adapterName
+
+    # Check if any IPv6 addresses are assigned
+    $ipv6Enabled = $addresses | Where-Object { $_.AddressFamily -eq 'IPv6' }
+
+    if ($ipv6Enabled) {
+        Write-Output "Unsolved Vuln"
+    } else {
+        Solved -vuln_name "Disabled IPv6" -points 5
+    }
+} else {
+    
 }
 
 # Define the name of the adapter you want to check (Ethernet0)
