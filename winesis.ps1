@@ -340,4 +340,4 @@ if ($securityLevel -eq 3) {
 # spot to put your vulns ends here
 
 
-Write-Output "Total Score: $score/75"
+Write-Output "Total Score: $score/90"
