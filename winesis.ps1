@@ -222,19 +222,19 @@ Write-Output " "
 
 # spot to put your vulns begins here
 
-CheckTextExists -file 'C:\Users\Cyber\Desktop\FQ1' -text "SpavisComputer" -vuln_name "Forensics 1" -points 5
+# CheckTextExists -file 'C:\Users\Cyber\Desktop\FQ1' -text "SpavisComputer" -vuln_name "Forensics 1" -points 5
 CheckFileDeleted -file 'C:\Users\Cyber\AppData\Local\Discord\app.ico' -vuln_name "Removed Unwanted Software" -points 5
-CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -key ConsentPromptBehaviorAdmin -expected_value "2" -vuln_name "User Account Control Configured" -points 5
-CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile" -key EnableFirewall -expected_value "1" -vuln_name "Firewall Configured" -points 5
-CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance" -key fAllowToGetHelp -expected_value "0" -vuln_name "Disabled Remote Assistance" -points 5
-CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" -key fDenyTSConnections -expected_value "1" -vuln_name "Disabled Remote Desktop" -points 5
-CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -key RPSessionInterval -expected_value "1" -vuln_name "Turned on System Protection" -points 5
-CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\New Windows" -key PopupMgr -expected_value "1" -vuln_name "Enabled Pop-Up Blocker" -points 5
-CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key EnableHttp1_1 -expected_value "0" -vuln_name "Disabled HTTP 1.1" -points 5
-CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key EnableHttp2 -expected_value "1" -vuln_name "Disabled HTTP 1.1" -points 5
-CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key ProxyHttp1.1 -expected_value "0" -vuln_name "Disabled HTTP 1.1 through proxy connections" -points 5
-CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -key DisableAutoplay -expected_value "1" -vuln_name "Disabled AutoPlay" -points 5
-CheckFileDeleted -Path 'C:\Windows\System32\TFTP.EXE' -vuln_name "Uninstalled TFTP" -points 5
+# CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -key ConsentPromptBehaviorAdmin -expected_value "2" -vuln_name "User Account Control Configured" -points 5
+# CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile" -key EnableFirewall -expected_value "1" -vuln_name "Firewall Configured" -points 5
+# CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance" -key fAllowToGetHelp -expected_value "0" -vuln_name "Disabled Remote Assistance" -points 5
+# CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" -key fDenyTSConnections -expected_value "1" -vuln_name "Disabled Remote Desktop" -points 5
+# CheckRegistryKey -Path "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -key RPSessionInterval -expected_value "1" -vuln_name "Turned on System Protection" -points 5
+# CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\New Windows" -key PopupMgr -expected_value "1" -vuln_name "Enabled Pop-Up Blocker" -points 5
+# CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key EnableHttp1_1 -expected_value "0" -vuln_name "Disabled HTTP 1.1" -points 5
+# CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key EnableHttp2 -expected_value "1" -vuln_name "Disabled HTTP 1.1" -points 5
+# CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key ProxyHttp1.1 -expected_value "0" -vuln_name "Disabled HTTP 1.1 through proxy connections" -points 5
+# CheckRegistryKey -Path "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -key DisableAutoplay -expected_value "1" -vuln_name "Disabled AutoPlay" -points 5
+# CheckFileDeleted -Path 'C:\Windows\System32\TFTP.EXE' -vuln_name "Uninstalled TFTP" -points 5
 
 
 # $adapterName = "Ethernet0"
