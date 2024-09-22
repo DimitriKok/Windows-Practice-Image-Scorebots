@@ -250,7 +250,7 @@ $user = Get-WmiObject -Class Win32_UserAccount | Where-Object { $_.Name -eq $use
 # Check if the user exists and if they are disabled
 if ($user) {
     if ($user.Disabled -eq $true) {
-        Solved -vuln_name "Disabled User Oscar"
+        Solved -vuln_name "Disabled User Oscar" -points 5
     } else {
         Write-Output "Unsolved Vuln"
     }
