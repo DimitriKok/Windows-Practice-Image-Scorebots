@@ -222,117 +222,178 @@ Write-Output " "
 
 # spot to put your vulns begins here
 
-CheckTextExists -file 'C:\Users\Cyber\Desktop\FQ1.txt' -text "SpavisComputer" -vuln_name "Forensics 1" -points 5
-CheckFileDeleted -file 'C:\Users\Cyber\AppData\Local\Discord\app.ico' -vuln_name "Removed Unwanted Software" -points 5
-CheckRegistryKey -path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -key ConsentPromptBehaviorAdmin -expected_value "2" -vuln_name "User Account Control Configured" -points 5
-CheckRegistryKey -path "HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile" -key EnableFirewall -expected_value "1" -vuln_name "Firewall Configured" -points 5
-CheckRegistryKey -path "HKLM:\SYSTEM\CurrentControlSet\Control\Remote Assistance" -key fAllowToGetHelp -expected_value "0" -vuln_name "Disabled Remote Assistance" -points 5
-CheckRegistryKey -path "HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server" -key fDenyTSConnections -expected_value "1" -vuln_name "Disabled Remote Desktop" -points 5
-CheckRegistryKey -path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" -key RPSessionInterval -expected_value "1" -vuln_name "Turned on System Protection" -points 5
-CheckRegistryKey -path "HKCU:\Software\Microsoft\Internet Explorer\New Windows" -key PopupMgr -expected_value "1" -vuln_name "Enabled Pop-Up Blocker" -points 5
-CheckRegistryKey -path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key EnableHttp1_1 -expected_value "0" -vuln_name "Disabled HTTP 1.1" -points 5
-CheckRegistryKey -path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key EnableHttp2 -expected_value "1" -vuln_name "Enabled HTTP 2" -points 5
-CheckRegistryKey -path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -key ProxyHttp1.1 -expected_value "0" -vuln_name "Disabled HTTP 1.1 through proxy connections" -points 5
-CheckRegistryKey -path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers" -key DisableAutoplay -expected_value "1" -vuln_name "Disabled AutoPlay" -points 5
+# Define the username to check
+$usernameO = "Ben"  # Replace with the username you want to check
 
-# Define the feature name for TFTP
-$featureName = 'TFTP'
+# Get the local user account
+$user = Get-WmiObject -Class Win32_UserAccount | Where-Object { $_.Name -eq $usernameO }
 
-# Check if TFTP feature is installed
-$feature = Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $featureName }
-
-# Check the status and output result
-if ($feature) {
-    if ($feature.State -eq 'Enabled') {
-        Write-Output "Unsolved Vuln"
+# Check if the user exists and if they are disabled
+if ($user) {
+    if ($user.Disabled -eq $true) {
+        Solved -vuln_name "Disabled User Ben" -points 5
     } else {
-        Solved -vuln_name "Uninstalled TFTP" -points 5
+        Write-Output "Unsolved vuln"
     }
-} else {
+} 
 
+
+
+
+
+# Define the username to check
+$usernameT = "Oscar"  # Replace with the username you want to check
+
+# Get the local user account
+$user = Get-WmiObject -Class Win32_UserAccount | Where-Object { $_.Name -eq $usernameT }
+
+# Check if the user exists and if they are disabled
+if ($user) {
+    if ($user.Disabled -eq $true) {
+        Solved -vuln_name "Disabled User Oscar"
+    } else {
+        Write-Output "Unsolved Vuln"
+    }
 }
 
 
 
-# Specify the adapter name
-$adapterName = "Ethernet0"
 
-# Get the network adapter
-$adapter = Get-NetAdapter -Name $adapterName -ErrorAction SilentlyContinue
 
-# Check if the adapter exists
-if ($adapter) {
-    # Get the IP addresses assigned to the adapter
-    $addresses = Get-NetIPAddress -InterfaceAlias $adapterName
+# Define the username to check
+$usernameR = "Omron"  # Replace with the username you want to check
 
-    # Check if any IPv6 addresses are assigned
-    $ipv6Enabled = $addresses | Where-Object { $_.AddressFamily -eq 'IPv6' }
+# Get the local user account
+$user = Get-WmiObject -Class Win32_UserAccount | Where-Object { $_.Name -eq $usernameR }
 
-    if ($ipv6Enabled) {
-        Write-Output "Unsolved Vuln"
+# Check if the user exists and if they are disabled
+if ($user) {
+    if ($user.Disabled -eq $true) {
+        Write-Output "Unsolved vuln"
     } else {
-        Solved -vuln_name "Disabled IPv6" -points 5
+        Solved -vuln_name "Created User Omron" -points 5
     }
+} 
+
+
+
+
+
+# Define the group name to check
+$groupName = "Field Ops"
+
+# Get the local groups
+$group = Get-WmiObject -Class Win32_Group | Where-Object { $_.Name -eq $groupName }
+
+# Check if the group exists
+if ($group) {
+    Solved -vuln_name "Created Group Field Ops" -points 5
 } else {
-    
+    Write-Output "Unsolved vuln"
 }
 
-# Define the name of the adapter you want to check (Ethernet0)
-$adapterName = "Ethernet0"
 
-# Check if the adapter exists
-$adapter = Get-NetAdapter -Name $adapterName -ErrorAction SilentlyContinue
 
-if ($adapter) {
-    # Check if LLTDIO (Link-Layer Topology Discovery Mapper I/O Driver) is enabled
-    $bindingStatus = Get-NetAdapterBinding -Name $adapterName -ComponentID ms_lltdio
 
-    if ($bindingStatus.Enabled) {
-        
+# Define the username to check
+$usernameA = "Coyne"  # Replace with the username you want to check
+
+# Define the group name
+$groupName = "Field Ops"
+
+# Get the group members
+$group = Get-WmiObject -Class Win32_Group | Where-Object { $_.Name -eq $groupName }
+
+# Check if the group exists
+if ($group) {
+    $members = $group.GetRelated("Win32_UserAccount")
+    $userExists = $members | Where-Object { $_.Name -eq $usernameA }
+
+    if ($userExists) {
+        Solved -vuln_name "Added user coyne to group Field Ops" -points 5
     } else {
-        Solved -vuln_name "Disabled Link-Layer Topology Discovery Mapper I/O Driver" -points 5
+        Write-Output "Unsolved vuln"
     }
 } else {
     Write-Output "Unsolved Vuln"
 }
 
-# Define the registry path for Internet Explorer security zones
-$regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones"
 
-# Function to get the security level for a given zone
-function Get-SecurityZoneLevel {
-    param (
-        [int]$zoneId
-    )
+# Define the username to check
+$usernameA = "Ryan"  # Replace with the username you want to check
 
-    # Define the registry key path for the specified zone
-    $regKey = "$regPath\$zoneId"
+# Define the group name
+$groupName = "Field Ops"
 
-    if (Test-Path $regKey) {
-        # Read the security level value from the registry
-        $zoneSettings = Get-ItemProperty -Path $regKey
-        if ($zoneSettings.PSObject.Properties.Match("1001")) {
-            # 1001 is the key for the Security Level
-            return $zoneSettings."1001"
-        } else {
-            return "Security level not found for zone ID $zoneId."
-        }
+# Get the group members
+$group = Get-WmiObject -Class Win32_Group | Where-Object { $_.Name -eq $groupName }
+
+# Check if the group exists
+if ($group) {
+    $members = $group.GetRelated("Win32_UserAccount")
+    $userExists = $members | Where-Object { $_.Name -eq $usernameA }
+
+    if ($userExists) {
+        Solved -vuln_name "Added user Ryan to group Field Ops" -points 5
     } else {
-        return "Zone $zoneId not found."
+        Write-Output "Unsolved vuln"
     }
-}
-
-# Check the Internet zone (zone ID 3)
-$internetZoneId = 3
-$securityLevel = Get-SecurityZoneLevel -zoneId $internetZoneId
-
-# Output the security level and print "yay" if the level is 3
-if ($securityLevel -eq 3) {
-    Solved -vuln_name "Security Zone Set to 3" -points 5
 } else {
     Write-Output "Unsolved Vuln"
 }
 
+
+
+
+
+# Define the username to check
+$usernameA = "Billy"  # Replace with the username you want to check
+
+# Define the group name
+$groupName = "Administrators"
+
+# Get the group members
+$group = Get-WmiObject -Class Win32_Group | Where-Object { $_.Name -eq $groupName }
+
+# Check if the group exists
+if ($group) {
+    $members = $group.GetRelated("Win32_UserAccount")
+    $userExists = $members | Where-Object { $_.Name -eq $usernameA }
+
+    if ($userExists) {
+        Solved -vuln_name "User Billy is an Administrator" -points 5
+    } else {
+        Write-Output "Unsolved vuln"
+    }
+} else {
+    Write-Output "Unsolved Vuln"
+}
+
+# Define the username to check
+$usernameA = "Ben"  # Replace with the username you want to check
+
+# Define the group name
+$groupName = "Administrators"
+
+# Get the group members
+$group = Get-WmiObject -Class Win32_Group | Where-Object { $_.Name -eq $groupName }
+
+# Check if the group exists
+if ($group) {
+    $members = $group.GetRelated("Win32_UserAccount")
+    $userExists = $members | Where-Object { $_.Name -eq $usernameA }
+
+    if ($userExists) {
+        Write-Output "Unsolved Vuln"
+    } else {
+        Solved -vuln_name "User Ben is not an Administrator" -points 5
+    }
+} else {
+    Write-Output "Unsolved Vuln"
+}
+
+CheckTextExists -file "C:\Users\Cyber\Desktop\Forensics Question 1" -text "9530db30ac49a1fe5a36a20f0ab25fad" -vuln_name "Forensics Question 1 Solved" -points 10
+CheckTextExists -file "C:\Users\Cyber\Desktop\Forensics Question 2" -text "Windows Da Goat" -vuln_name "Forensics Question 2 Solved" -points 10
 
 
 
@@ -340,4 +401,4 @@ if ($securityLevel -eq 3) {
 # spot to put your vulns ends here
 
 
-Write-Output "Total Score: $score/90"
+Write-Output "Total Score: $score/60"
