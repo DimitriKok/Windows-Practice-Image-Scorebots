@@ -392,8 +392,8 @@ if ($group) {
     Write-Output "Unsolved Vuln"
 }
 
-CheckTextExists -file "C:\Users\Cyber\Desktop\Forensics Question 1" -text "9530db30ac49a1fe5a36a20f0ab25fad" -vuln_name "Forensics Question 1 Solved" -points 10
-CheckTextExists -file "C:\Users\Cyber\Desktop\Forensics Question 2" -text "Windows Da Goat" -vuln_name "Forensics Question 2 Solved" -points 10
+CheckTextExists -file "C:\Users\Cyber\Desktop\Forensics Question 1.txt" -text "9530db30ac49a1fe5a36a20f0ab25fad" -vuln_name "Forensics Question 1 Solved" -points 10
+CheckTextExists -file "C:\Users\Cyber\Desktop\Forensics Question 2.txt" -text "Windows Da Goat" -vuln_name "Forensics Question 2 Solved" -points 10
 
 
 
