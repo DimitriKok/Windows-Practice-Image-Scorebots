@@ -1,0 +1,10 @@
+Disabled User Plankton
+Created User Larry
+Created Group The Krusty Krab
+Added user Spongebob to group The Krusty Krab
+Added user Squidward to group The Krusty Krab
+Added user Mr. Krabs to group The Krusty Krab
+User Squidward is an Administrator
+User Plankton is not an Administrator
+User Sandy's password expires
+Forensics Question 1 Solved: 5a1d20c5151a44c33e34be67fdad1d60
