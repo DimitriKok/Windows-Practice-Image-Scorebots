@@ -1,0 +1,10 @@
+Disabled User DanTDM
+Added user Mr. Beast to group Prime Squad
+User Logan Paul is an Administrator
+User The Rizzler is not an Administrator
+User The Rizzler's password expires
+Created group Prime Squad
+Enabled UAC
+Disabled Remote Assistance
+Disabled RDP
+Forensics Question 1 Solved: LunchlyCo
