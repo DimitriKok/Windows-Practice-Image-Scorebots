@@ -350,8 +350,6 @@ $installedVersion = Get-7ZipInstalledVersion
 $latestVersion = Get-Latest7ZipVersion
 
 if ($installedVersion -and $latestVersion) {
-    Write-Output "Installed version: $installedVersion"
-    Write-Output "Latest version: $latestVersion"
     
     if ($installedVersion -eq $latestVersion) {
         Solved -vuln_name "7-zip has been updated" -points 5
